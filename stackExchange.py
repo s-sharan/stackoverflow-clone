@@ -1,7 +1,6 @@
 import stackexchange
-import xml
 from bs4 import BeautifulSoup
-import inspect
+
 def insertUser(site,userid):
     #TODO
     #Query the database to check if the user is already present, if not present 
@@ -70,6 +69,3 @@ def main():
 
 if __name__=="__main__":
     main()
-    
-
-
