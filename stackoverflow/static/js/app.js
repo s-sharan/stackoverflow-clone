@@ -30,8 +30,10 @@ app.config(function($stateProvider, $urlRouterProvider) {
   });
 });
 
-app.controller('navigationController', function($scope) {
+app.controller('navigationController', function($scope, $state) {
     console.log("Testing Navigation");
+    $scope.logout = function() {$state.go('login');};
+    $scope.isLoggedIn = function() {return !$state.is('login')};
 });
 
 app.controller('loginController', function($scope, $state) {
