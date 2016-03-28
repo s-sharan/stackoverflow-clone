@@ -38,6 +38,13 @@ app.controller('questionController', function($scope, $rootScope, $state) {
     console.log('Testing Question');
     $scope.question = $rootScope.selectedQuestion;
     $scope.back = function() {$state.go('search')};
+    
+    $scope.hasComments = function(answer) {
+        console.log('answer = ' + answer);
+        if(answer != null && answer.comments != null && answer.comments.length > 0)
+            return true;
+        return false;
+    };
 });
 
 app.controller('searchController', function($scope, $rootScope, $state) {
