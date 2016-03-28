@@ -14,12 +14,13 @@
     <body style="background-color: #eaeaea;">
         <nav class="navbar navbar-default" role="navigation" ng-controller="navigationController">
             <div class="navbar-header">
-                <a class="navbar-brand" ui-sref="search">Stack Over Flow</a>
+                <a class="navbar-brand" href="#">Navigation</a>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li><a ui-sref="createQuestion">Create a Question</a></li>
-                    <li><a ui-sref="admin">Admin</a></li>
+                    <li ng-show="isLoggedIn()"><a ui-sref="search">Search</a></li>
+                    <li ng-show="isLoggedIn()"><a ui-sref="createQuestion">Create a Question</a></li>
+                    <li ng-show="isLoggedIn()"><a ui-sref="admin">Admin</a></li>
                 </ul>
                 <div class="pull-right">
                     <button class= "btn btn-danger" style="margin-top: 8px" type="button" ng-click='logout()' ng-show="isLoggedIn()"> Logout </button>
