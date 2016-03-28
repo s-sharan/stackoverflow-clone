@@ -42,16 +42,16 @@ app.controller('questionController', function($scope, $rootScope, $state) {
 
 app.controller('searchController', function($scope, $rootScope, $state) {
     console.log('Testing Search');
-    $scope.questions = [{title: 'Is angular better than react ?', tags: ['C++', 'Java']}, 
-        {title: 'Is java better than C++ ?', tags: ['C++', 'Java']}, 
-        {title: 'Is javascript a better language ?', tags: ['C++', 'Java']}, 
-        {title: 'Is angular better than react ?', tags: ['C++', 'Java']},
-        {title: 'Is javascript a better language ?', tags: ['C++', 'Java']}, 
-        {title: 'Is angular better than react ?', tags: ['C++', 'Java']},
-        {title: 'Is javascript a better language ?', tags: ['C++', 'Java']}, 
-        {title: 'Is angular better than react ?', tags: ['C++', 'Java']},
-        {title: 'Is javascript a better language ?', tags: ['C++', 'Java']}, 
-        {title: 'Is angular better than react ?', tags: ['C++', 'Java']}];
+    $scope.questions = [{title: 'Is angular better than react ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all', comments: [{text: 'Is it really ?'}]}, {title: 'Yes it is right'}]}, 
+        {title: 'Is java better than C++ ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]}, 
+        {title: 'Is javascript a better language ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]}, 
+        {title: 'Is angular better than react ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]},
+        {title: 'Is javascript a better language ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]}, 
+        {title: 'Is angular better than react ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]},
+        {title: 'Is javascript a better language ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]}, 
+        {title: 'Is angular better than react ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]},
+        {title: 'Is javascript a better language ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]}, 
+        {title: 'Is angular better than react ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]}];
     console.log($scope.questions);
     
     $scope.viewQuestion = function(index) {
