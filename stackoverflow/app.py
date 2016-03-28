@@ -3,7 +3,7 @@ from flask.ext.triangle import Triangle
 app = Flask(__name__)
 Triangle(app)
 
-@app.route("/index.html")
+@app.route("/")
 def indexHTML():
     return render_template('index.html')
     
@@ -27,6 +27,10 @@ def questionHTML():
 @app.route("/createQuestion.html")
 def createQuestionHTML():
     return render_template('createQuestion.html')
+
+@app.route("/admin.html")
+def adminHTML():
+    return render_template('admin.html')
 
 if __name__ == "__main__":
     app.run()

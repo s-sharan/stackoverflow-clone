@@ -18,6 +18,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
       url: '/createQuestion',
       controller: 'createQuestionController'
   })
+  .state('admin', {
+      templateUrl: 'admin.html',
+      url: '/admin',
+      controller: 'adminController'
+  })
   .state('question', {
     templateUrl: 'question.html',
     url: '/search',
@@ -77,5 +82,17 @@ app.controller('searchController', function($scope, $rootScope, $state) {
 });
 
 app.controller('createQuestionController', function($scope) {
+    $scope.allTags = [{id: 1, label:"C++"}, {id: 2, label: "Java"}];
+    $scope.selectedTags = [];
     console.log('Testing Create Question');
+});
+
+app.controller('adminController', function($scope) {
+    console.log('Testing admin Page');
+    $scope.user = {name: "Rakesh Yarlagadda", badges: ["Silver", "Gold"]};
+    $scope.fecthUser = function() {
+        alert($scope.username);
+    }
+    $scope.assignableBadges = ["Bronze"];
+    $scope.removableBadges = ["Silver", "Gold"];
 });

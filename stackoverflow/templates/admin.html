@@ -1,0 +1,36 @@
+<div class="panel panel-default panel-body">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-xs-9">
+                    <h3> User Information </h3>
+                </div>
+                <div class="col-xs-3 pull-right">
+                    <form class="navbar-form" role="search">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search" ng-model="username">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" ng-click="fecthUser()"><i class="glyphicon glyphicon-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4 style="margin: 10px">{{user.name|angular}} <span class="label label-info" ng-repeat="badge in user.badges" style="margin-right: 5px">{{badge|angular}}</span></h4>
+                    <button ng-repeat="badge in assignableBadges" class= "btn btn-primary" style="margin: 10px" type="button" ng-click=''> Assign {{badge|angular}} </button>
+                    <br>
+                    <button ng-repeat="badge in removableBadges" class= "btn btn-danger" style="margin: 10px" type="button" ng-click=''> Remove {{badge|angular}} </button>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-xs-12">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
