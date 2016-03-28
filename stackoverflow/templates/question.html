@@ -3,7 +3,7 @@
         <div class="col-md-12 lead">
             <div class="row">
                 <div class="col-xs-9">
-                    <h2 style="text-align: left;"> {{question.title}}</h2>
+                    <h2 style="text-align: left;"> {{question.title|angular}}</h2>
                 </div>
                 <div class="col-xs-3">
                     <button ng-click="back()" type="button" class="btn btn-default pull-right" style="margin-top: 15px">Back</button>
@@ -17,15 +17,15 @@
                           <tr ng-repeat="answer in question.answers">
                               <td class="col-xs-12">
                                     <div> 
-                                        <h4>{{answer.title}}</h4>
-                                        <div class="panel panel-default inbox" ng-show='hasComments({{answer}})'>
+                                        <h4>{{answer.title|angular}}</h4>
+                                        <div class="panel panel-default inbox" ng-show='hasComments({{answer|angular}})'>
                                             <div class="table-responsive">
                                                 <table class="table table-striped table-hover">
                                                   <tbody>
                                                       <tr ng-repeat="comment in answer.comments">
                                                           <td class="col-xs-12">
                                                               <div> 
-                                                                  <h6>{{comment.text}}</h6>
+                                                                  <h6>{{comment.text|angular}}</h6>
                                                               </div>
                                                           </td>
                                                       </tr>

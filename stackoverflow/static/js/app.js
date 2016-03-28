@@ -13,10 +13,15 @@ app.config(function($stateProvider, $urlRouterProvider) {
       url: '/search',
       controller: 'searchController'
   })
+  .state('createQuestion', {
+      templateUrl: 'createQuestion.html',
+      url: '/createQuestion',
+      controller: 'createQuestionController'
+  })
   .state('question', {
-    templateUrl: "question.html",
+    templateUrl: 'question.html',
     url: '/search',
-    controller: "questionController"
+    controller: 'questionController'
   });
 });
 
@@ -65,4 +70,12 @@ app.controller('searchController', function($scope, $rootScope, $state) {
         $rootScope.selectedQuestion = $scope.questions[index];
         $state.go('question');
     };
+    
+    $scope.search = function(queryString) {
+        
+    }
+});
+
+app.controller('createQuestionController', function($scope) {
+    console.log('Testing Create Question');
 });
