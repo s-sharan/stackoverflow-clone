@@ -28,7 +28,7 @@
                                                                     <button ng-click="" type="button" class="btn btn-default" style="margin-top: 0px">Create a Comment</button>
                                                                 </div>
                                                                 <div class="col-xs-10">
-                                                                    <input class="form-control" type="text" ng-model="" placeholder="Enter an Answer">
+                                                                    <input class="form-control" type="text" placeholder="Enter a Comment">
                                                                 </div>
                                                             </div>
                                                        </tr> 
@@ -53,10 +53,10 @@
             <hr>
             <div class="row">
                 <div class="col-xs-2">
-                    <button ng-click="" type="button" class="btn btn-default" style="margin-top: 30px">Create an Answer</button>
+                    <button ng-click="createAnswer()" type="button" class="btn btn-default" style="margin-top: 30px">Create an Answer</button>
                 </div>
                 <div class="col-xs-10">
-                    <textarea rows="5" class="form-control" ng-model="newAnswer" placeholder="Enter an Answer">
+                    <textarea rows="5" class="form-control" ng-model="newanswer" placeholder="Enter an Answer">
                 </div>
             </div>
         </div>

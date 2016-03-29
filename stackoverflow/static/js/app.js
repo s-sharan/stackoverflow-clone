@@ -48,16 +48,29 @@ app.controller('loginController', function($scope, $state) {
     };
 });
 
-app.controller('questionController', function($scope, $rootScope, $state) {
+app.controller('questionController', function($scope, $rootScope, $state, $http) {
+    
     $scope.question = $rootScope.selectedQuestion;
-    console.log($scope.question);
     $scope.back = function() {$state.go('search')};
     
-    $scope.hasComments = function(answer) {
-        console.log(answer);
-        if(answer != null && answer.comments != null && answer.comments.length > 0)
-            return true;
-        return false;
+    $scope.createAnswer = function() {
+        if($scope.newanswer == null) return alert('Please enter answer');
+        $http({
+            method: 'POST',
+            url: '/insertanswer',
+            data: {
+                userid: $rootScope.user.userid,
+                questionid: $scope.question.questionid,
+                body: $scope.newanswer
+            },
+            transformResponse: function (data, headersGetter, status) {
+                return {data: data};
+            }
+        }).success(function (response, status) {
+            console.log(status);
+        }).error(function () {
+            console.log('failure');
+        });
     };
 });
 
