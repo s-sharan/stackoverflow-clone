@@ -116,7 +116,7 @@ app.controller('questionController', function($scope, $rootScope, $state, $http)
 app.controller('searchController', function($scope, $rootScope, $state, $http) {
     console.log('Testing Search');
     $scope.questions = {};
-    
+    $scope.error = '';
     $scope.viewQuestion = function(index) {
         $rootScope.selectedQuestion = $scope.questions[index];
         console.log($rootScope.selectedQuestion.questionid);
@@ -124,8 +124,7 @@ app.controller('searchController', function($scope, $rootScope, $state, $http) {
     };
     
     $scope.searchQuery = function() {
-        
-        if($scope.query == null || $scope.query == "") alert('test');
+        if($scope.query == null || $scope.query == "") $scope.error = 'Please enter a query';
         else {
             $http({
                 method: 'POST',
@@ -136,6 +135,8 @@ app.controller('searchController', function($scope, $rootScope, $state, $http) {
                 }
             }).success(function (response, status) {
                 $scope.questions = JSON.parse(response.data);
+                if(JSON.parse(response.data) == null || JSON.parse(response.data).length <= 0)
+                    $scope.error = 'No search results found';
             }).error(function () {
                 console.log('failure');
             });
