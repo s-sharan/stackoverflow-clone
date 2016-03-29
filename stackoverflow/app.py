@@ -178,8 +178,9 @@ def insertComment():
     userid=content["userid"]
     answerid=content["answerid"]
     body=content["body"]
-    today = date.today().isoformat()+time.strftime("%H:%M:%S")
+    today = date.today().isoformat() + ' ' +time.strftime("%H:%M:%S")
     sql='insert into comments values(%s,%s,\'%s\',\'%s\');'%(answerid,userid,today,body)
+    print (sql)
     cur = conn.cursor()
     try:
         cur.execute(sql)

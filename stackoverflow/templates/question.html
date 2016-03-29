@@ -25,10 +25,10 @@
                                                        <tr>
                                                             <div class="row">
                                                                 <div class="col-xs-2">
-                                                                    <button ng-click="" type="button" class="btn btn-default" style="margin-top: 0px">Create a Comment</button>
+                                                                    <button ng-click="createComment(answer.answerid)" type="button" class="btn btn-default" style="margin-top: 0px">Create a Comment</button>
                                                                 </div>
                                                                 <div class="col-xs-10">
-                                                                    <input class="form-control" type="text" placeholder="Enter a Comment">
+                                                                    <input class="form-control" type="text" id="{{answer.answerid|angular}}" placeholder="Enter a Comment">
                                                                 </div>
                                                             </div>
                                                        </tr> 

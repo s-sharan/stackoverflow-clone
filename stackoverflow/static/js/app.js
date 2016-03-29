@@ -90,6 +90,27 @@ app.controller('questionController', function($scope, $rootScope, $state, $http)
             console.log('failure');
         });
     };
+    
+    $scope.createComment = function(answerid) {
+        var textId = "#" + answerid;
+        console.log(answerid + ' text = ' + $(textId).val());
+        $http({
+            method: 'POST',
+            url: '/insertcomment',
+            data: {
+                userid: $rootScope.user.userid,
+                answerid: answerid,
+                body: $(textId).val()
+            },
+            transformResponse: function (data, headersGetter, status) {
+                return {data: data};
+            }
+        }).success(function (response, status) {
+            console.log(status);
+            $state.reload('question');
+        }).error(function () {
+        });
+    };
 });
 
 app.controller('searchController', function($scope, $rootScope, $state, $http) {
