@@ -9,6 +9,11 @@
                     <button class= "btn btn-primary pull-right" style="margin-top: 15px" type="button" ng-click='createQuestion()'> Create Question </button>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <span class="label label-warning">{{error|angular}}</span>
+                </div>
+            </div>
             <hr>
             <div class="row">
                 <div class="col-xs-12">
@@ -18,7 +23,7 @@
                             <input class="form-control" type="text" ng-model='question.title' placeholder="Title of the Question">
                         </div>
                         <div class="form-group">
-                            <select multiple class="form-control">
+                            <select multiple class="form-control" ng-model="selectedTags">
                                 <option value="volvo">Volvo</option>
                                 <option value="saab">Saab</option>
                                 <option value="mercedes">Mercedes</option>

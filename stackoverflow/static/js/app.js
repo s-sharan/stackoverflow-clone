@@ -83,9 +83,31 @@ app.controller('searchController', function($scope, $rootScope, $state) {
     }
 });
 
-app.controller('createQuestionController', function($scope) {
+app.controller('createQuestionController', function($scope, $http) {
+    $scope.question = {};
+    $scope.error = "";
     $scope.allTags = [{id: 1, label:"C++"}, {id: 2, label: "Java"}];
-    $scope.selectedTags = [];
+    $scope.createQuestion = function() {
+        if($scope.question.title == null) $scope.error = "Enter a title for the question";
+        else if($scope.question.body == null) $scope.error = "Enter description for the question";
+        else if($scope.selectedTags == null || $scope.selectedTags.length <= 0) $scope.error = "Please select atleast one Tag";
+        else {
+            $http.post('/insertquestion', {
+                userid: "1",
+                title: $scope.question.title,
+                body: $scope.question.body,
+                tags: $scope.selectedTags
+              }).then(function (response) {
+                console.log('response = ' + JSON.stringify(response));
+                if (response.status == 200) {
+                  $scope.error="Question Created Successfully";
+                  $scope.question.title = null; $scope.question.body = null; $scope.selectedTags = null; 
+                }
+                else
+                  $scope.createStatus = 'Error = ' + JSON.stringify(response);
+              });
+        }
+    };
     console.log('Testing Create Question');
 });
 
