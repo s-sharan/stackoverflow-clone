@@ -14,6 +14,31 @@ conn = psycopg2.connect("dbname='ry2294' user='ry2294' password='VFGTHP' host='w
 def indexHTML():
     return render_template('index.html')
     
+@app.route("/auth",methods=['POST'])
+def fbauth():
+    global conn;
+    content=request.get_json()["name"]
+    sql='select * from users where name =%s;'
+    print (sql)
+    try:
+        cur = conn.cursor()
+        cur.execute(sql,[content])
+        if(cur.fetchone()==None):
+            sql = 'select max(userid) from users;'
+            cur.execute(sql)
+            userid=int(cur.fetchone()[0])+1
+            today = date.today().isoformat()
+            sql= ' insert into users values(%s,%s,%s);'
+            cur.execute(sql,[userid,content,today])
+            conn.commit()
+        else:
+            sql = 'select userid from users where name=%s;'
+            cur.execute(sql,[content])
+            userid=int(cur.fetchone()[0])
+    except Exception as e:
+        print e
+    return str(userid)
+    
 @app.route("/search",methods=['POST'])
 def search():
     global conn;
@@ -122,7 +147,6 @@ def getUserInfo():
     
 @app.route("/insertquestion",methods=['POST'])
 def insertquestion():
-    print 'fbdhsjafbdasjl jfndkslafnjlds'
     global conn;
     print(request.get_json())
     content = request.get_json()
