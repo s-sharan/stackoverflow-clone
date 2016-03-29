@@ -53,24 +53,37 @@ app.controller('navigationController', function($scope, $state, $rootScope, $fac
     
     $scope.logout = function() {$state.go('login');};
     $scope.isLoggedIn = function() {return !$state.is('login')};
-    $rootScope.user = {userid: "5969614"};
 });
 
-app.controller('loginController', function($scope, $state, $facebook, $rootScope) {
+app.controller('loginController', function($scope, $state, $facebook, $rootScope, $http) {
     $scope.$on('fb.auth.authResponseChange', function() {
-      $scope.status = $facebook.isConnected();
-      if($scope.status) {
+      if($facebook.isConnected()) {
         $facebook.api('/me').then(function(user) {
-          $rootScope.user = user;
-          $scope.user = user;
-          console.log(user);
-          $state.go('search');
+            $http({
+                method: 'POST',
+                url: '/auth',
+                data: {
+                    name: user.name
+                },
+                transformResponse: function (data, headersGetter, status) {
+                    return {data: data};
+                }
+            }).success(function (response, status) {
+                console.log(status);
+                console.log(JSON.parse(response.data));
+                $rootScope.user = {name: user.name, userid: JSON.parse(response.data)};
+                $scope.user = $rootScope.user;
+                console.log($rootScope.user);
+                $state.go('search');
+            }).error(function () {
+                console.log('failure');
+            });
         });
       }
     });
 
     $scope.loginToggle = function() {
-      if($scope.status) {
+      if($facebook.isConnected()) {
         $facebook.logout();
       } else {
         $facebook.login();

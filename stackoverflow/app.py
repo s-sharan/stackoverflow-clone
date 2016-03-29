@@ -233,7 +233,7 @@ def removeBadge():
     content = request.get_json()
     badge=content["badge"]
     userid=content["userid"]
-    sql='delete from userbadges where badgename=%s and userid=%s;'%(badge,userid);
+    sql='delete from userbadges where badgename = \'%s\' and userid=%s;'%(badge,userid);
     try:
         cur = conn.cursor()
         cur.execute(sql,[badge,userid])
