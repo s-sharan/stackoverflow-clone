@@ -59,27 +59,34 @@ app.controller('questionController', function($scope, $rootScope, $state) {
     };
 });
 
-app.controller('searchController', function($scope, $rootScope, $state) {
+app.controller('searchController', function($scope, $rootScope, $state, $http) {
     console.log('Testing Search');
-    $scope.questions = [{title: 'Is angular better than react ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all', comments: [{text: 'Is it really ?'}]}, {title: 'Yes it is right'}]}, 
-        {title: 'Is java better than C++ ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]}, 
-        {title: 'Is javascript a better language ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]}, 
-        {title: 'Is angular better than react ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]},
-        {title: 'Is javascript a better language ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]}, 
-        {title: 'Is angular better than react ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]},
-        {title: 'Is javascript a better language ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]}, 
-        {title: 'Is angular better than react ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]},
-        {title: 'Is javascript a better language ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]}, 
-        {title: 'Is angular better than react ?', tags: ['C++', 'Java'], answers: [{title: 'No not at all'}, {title: 'Yes it is right'}]}];
-    console.log($scope.questions);
+    $scope.questions = {};
     
     $scope.viewQuestion = function(index) {
         $rootScope.selectedQuestion = $scope.questions[index];
         $state.go('question');
     };
     
-    $scope.search = function(queryString) {
+    $scope.searchQuery = function() {
         
+        if($scope.query == null || $scope.query == "") alert('test');
+        else {
+            $http({
+                method: 'POST',
+                url: '/search',
+                data: {query: $scope.query},
+                transformResponse: function (data, headersGetter, status) {
+                    //This was implemented since the REST service is returning a plain/text response
+                    //and angularJS $http module can't parse the response like that.
+                    return {data: data};
+                }
+            }).success(function (response, status) {
+                $scope.questions = JSON.parse(response.data);
+            }).error(function () {
+                console.log('failure');
+            });
+        }
     }
 });
 

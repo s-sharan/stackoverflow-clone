@@ -26,15 +26,12 @@ def search():
                 jsonOb={}
                 jsonOb['questionid']=row[0]
                 jsonOb['userid']=row[1]
-                jsonOb['creationdate']=row[2]
                 jsonOb['title']=row[3]
                 jsonOb['body']=row[4]
                 jsonArr.append(jsonOb)
         except Exception as e:
             print e
-    res={}
-    res['result']=jsonArr;
-    return str(res)
+    return str(json.dumps(jsonArr))
 
 @app.route("/question",methods=['POST'])
 def questionSearch():
