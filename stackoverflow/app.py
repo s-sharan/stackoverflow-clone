@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from flask_oauth import OAuth
 from flask.ext.triangle import Triangle
 import psycopg2
 import json
@@ -24,7 +25,7 @@ facebook = oauth.remote_app('facebook',
     request_token_params={'scope': 'email'}
 )
 
-@app.route("/ind")
+@app.route("/")
 def indexHTML():
     return render_template('index.html')
     
@@ -253,7 +254,13 @@ def createQuestionHTML():
 def adminHTML():
     return render_template('admin.html')
 
-@app.route('/')
+@application.route('/fb')
+def login():
+    return facebook.authorize(callback=url_for('facebook_authorized',
+        next=request.args.get('next') or request.referrer or None,
+        _external=True))
+
+@app.route('/fblog')
 @facebook.authorized_handler
 def facebook_authorized(resp):
     if resp is None:
