@@ -9,6 +9,20 @@ from StringIO import StringIO
 app = Flask(__name__)
 Triangle(app)
 conn = psycopg2.connect("dbname='ry2294' user='ry2294' password='VFGTHP' host='w4111db.eastus.cloudapp.azure.com'")
+FACEBOOK_APP_ID = '1647473852171564'
+FACEBOOK_APP_SECRET = '937e588bf50f0560ec4823ca4f268731'
+
+oauth = OAuth()
+
+facebook = oauth.remote_app('facebook',
+    base_url='https://graph.facebook.com/',
+    request_token_url=None,
+    access_token_url='/oauth/access_token',
+    authorize_url='https://www.facebook.com/dialog/oauth',
+    consumer_key=FACEBOOK_APP_ID,
+    consumer_secret=FACEBOOK_APP_SECRET,
+    request_token_params={'scope': 'email'}
+)
 
 @app.route("/")
 def indexHTML():
@@ -238,6 +252,30 @@ def createQuestionHTML():
 @app.route("/admin.html")
 def adminHTML():
     return render_template('admin.html')
+
+@app.route('/fb')
+@facebook.authorized_handler
+def facebook_authorized(resp):
+    if resp is None:
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error_reason'],
+            request.args['error_description']
+        )
+    session['oauth_token'] = (resp['access_token'], '')
+    me = facebook.get('/me')
+    session['name']=me.data['name']
+    session['id']=me.data['id']
+    print(session['name'],session['id'])
+
+    if(users.find({"name":me.data['name']}).count()>0):
+        return redirect(url_for('home'))
+    else:
+        return redirect(url_for('signup'))
+
+@facebook.tokengetter
+def get_facebook_oauth_token():
+    return session.get('oauth_token')
+
 
 if __name__ == "__main__":
     conn = psycopg2.connect("dbname='ry2294' user='ry2294' password='VFGTHP' host='w4111db.eastus.cloudapp.azure.com'")
