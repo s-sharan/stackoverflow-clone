@@ -39,9 +39,7 @@ def search():
 @app.route("/question",methods=['POST'])
 def questionSearch():
     global conn;
-    print 'tfdsete'
     if(request.method == 'POST'):
-        print 'tetete'
         content = request.get_json()["query"]
         print(content)
         sql = 'select * from answers a left outer join comments c on a.answerid=c.answerid where a.questionid=%s;'%(content)
@@ -75,6 +73,21 @@ def questionSearch():
         except Exception as e:
             print e
     return str(json.dumps(ans))
+    
+@app.route("/tags",methods=['POST'])
+def getTags():
+    global conn;
+    sql='select * from tags'
+    cur=conn.cursor()
+    try:
+        cur.execute(sql)
+        rows=cur.fetchall()
+        tags=[]
+        for row in rows:
+            tags.append(row[0])
+    except Exception as e:
+        print e
+    return str(json.dumps(tags))
 
 @app.route("/userinfo",methods=['POST'])
 def getUserInfo():
