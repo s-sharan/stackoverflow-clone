@@ -65,7 +65,23 @@ app.controller('searchController', function($scope, $rootScope, $state, $http) {
     
     $scope.viewQuestion = function(index) {
         $rootScope.selectedQuestion = $scope.questions[index];
-        $state.go('question');
+        console.log($rootScope.selectedQuestion.questionid);
+        $http({
+            method: 'POST',
+            url: '/question',
+            data: {query: $rootScope.selectedQuestion.questionid},
+            transformResponse: function (data, headersGetter, status) {
+                //This was implemented since the REST service is returning a plain/text response
+                //and angularJS $http module can't parse the response like that.
+                return {data: data};
+            }
+        }).success(function (response, status) {
+            console.log(JSON.parse(response.data));
+            // $rootScope.selectedQuestion.answers = JSON.parse(response.data);
+            // $state.go('question');
+        }).error(function () {
+            console.log('failure');
+        });
     };
     
     $scope.searchQuery = function() {

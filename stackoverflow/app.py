@@ -3,6 +3,7 @@ from flask.ext.triangle import Triangle
 import psycopg2
 import json
 from datetime import date
+from StringIO import StringIO
 
 app = Flask(__name__)
 Triangle(app)
@@ -38,9 +39,11 @@ def search():
 @app.route("/question",methods=['POST'])
 def questionSearch():
     global conn;
-    if(request.method== 'POST'):
+    print 'tfdsete'
+    if(request.method == 'POST'):
+        print 'tetete'
         content = request.get_json()["query"]
-        print(content.lower())
+        print(content)
         sql = 'select * from answers a left outer join comments c on a.answerid=c.answerid where a.questionid=%s;'%(content)
         print(sql)
         cur = conn.cursor()
@@ -55,13 +58,11 @@ def questionSearch():
                 if(row[5]!=None):
                     comments['answerid']=row[5]
                     comments['userid']=row[6]
-                    comments['creationdate']=row[7]
                     comments['body']=row[8]
                 if(row[0] not in ans):
                     answers['answerid']=row[0]
                     answers['questionid']=row[1]
                     answers['userid']=row[2]
-                    answers['creationdate']=row[3]
                     answers['body']=row[4]
                     c=[]
                     c.append(comments)
@@ -76,7 +77,7 @@ def questionSearch():
         except Exception as e:
             print e
 
-    return str(json.dumps(ans.values()))
+    return str(json.dumps(ans))
 
 
 @app.route("/userinfo",methods=['POST'])
@@ -95,7 +96,6 @@ def getUserInfo():
                 jsonOb={}
                 jsonOb['userid']=row[0]
                 jsonOb['name']=row[1]
-                jsonOb['creationdate']=row[2]
                 jsonOb['badgename']=row[3]
                 userArr.append(jsonOb)
         except Exception as e:
