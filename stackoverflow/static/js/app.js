@@ -134,11 +134,22 @@ app.controller('createQuestionController', function($scope, $http) {
     console.log('Testing Create Question');
 });
 
-app.controller('adminController', function($scope) {
+app.controller('adminController', function($scope, $http) {
     console.log('Testing admin Page');
     $scope.user = {name: "Rakesh Yarlagadda", badges: ["Silver", "Gold"]};
     $scope.fecthUser = function() {
-        alert($scope.username);
+        $http({
+            method: 'POST',
+            url: '/userinfo',
+            data: {username: $scope.username},
+            transformResponse: function (data, headersGetter, status) {
+                return {data: data};
+            }
+        }).success(function (response, status) {
+            console.log(JSON.parse(response.data));
+        }).error(function () {
+            console.log('failure');
+        });
     }
     $scope.assignableBadges = ["Bronze"];
     $scope.removableBadges = ["Silver", "Gold"];

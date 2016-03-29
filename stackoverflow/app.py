@@ -81,8 +81,7 @@ def getUserInfo():
     global conn;
     if(request.method== 'POST'):
         content = request.get_json()["username"]
-        sql='select * from users u, userbadges b where u.userid=b.userid lower(name) =\'%s\';'%(content.lower())
-        print(sql)
+        sql='select * from users u left outer join userbadges b on u.userid=b.userid where lower(u.name) =\'%s\';'%(content.lower())
         userArr=[]
         cur = conn.cursor()
         try:
@@ -96,11 +95,8 @@ def getUserInfo():
                 userArr.append(jsonOb)
         except Exception as e:
             print e
-    res={}
-    print(userArr)
-    res['result']=userArr;
-    return str(res)
-         
+    print str(json.dumps(userArr))
+    return str(json.dumps(userArr))
     
 @app.route("/insertquestion",methods=['POST'])
 def insertquestion():
