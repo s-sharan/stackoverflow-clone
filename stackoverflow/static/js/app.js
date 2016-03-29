@@ -47,12 +47,12 @@ app.controller('loginController', function($scope, $state) {
 });
 
 app.controller('questionController', function($scope, $rootScope, $state) {
-    console.log('Testing Question');
     $scope.question = $rootScope.selectedQuestion;
+    console.log($scope.question);
     $scope.back = function() {$state.go('search')};
     
     $scope.hasComments = function(answer) {
-        console.log('answer = ' + answer);
+        console.log(answer);
         if(answer != null && answer.comments != null && answer.comments.length > 0)
             return true;
         return false;
@@ -71,14 +71,16 @@ app.controller('searchController', function($scope, $rootScope, $state, $http) {
             url: '/question',
             data: {query: $rootScope.selectedQuestion.questionid},
             transformResponse: function (data, headersGetter, status) {
-                //This was implemented since the REST service is returning a plain/text response
-                //and angularJS $http module can't parse the response like that.
                 return {data: data};
             }
         }).success(function (response, status) {
-            console.log(JSON.parse(response.data));
-            // $rootScope.selectedQuestion.answers = JSON.parse(response.data);
-            // $state.go('question');
+            var answermap = JSON.parse(response.data);
+            var answers = [];
+            for (var key in answermap) {
+                answers.push(answermap[key]);
+            }
+            $rootScope.selectedQuestion.answers = answers;
+            $state.go('question');
         }).error(function () {
             console.log('failure');
         });
@@ -93,8 +95,6 @@ app.controller('searchController', function($scope, $rootScope, $state, $http) {
                 url: '/search',
                 data: {query: $scope.query},
                 transformResponse: function (data, headersGetter, status) {
-                    //This was implemented since the REST service is returning a plain/text response
-                    //and angularJS $http module can't parse the response like that.
                     return {data: data};
                 }
             }).success(function (response, status) {

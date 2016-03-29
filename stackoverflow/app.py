@@ -79,7 +79,6 @@ def questionSearch():
 
     return str(json.dumps(ans))
 
-
 @app.route("/userinfo",methods=['POST'])
 def getUserInfo():
     global conn;
