@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask.ext.triangle import Triangle
 import psycopg2
 import json
+import time
 from datetime import date
 from StringIO import StringIO
 
@@ -148,6 +149,46 @@ def insertquestion():
         print(e)
     return "Successfully added to database"
     
+@app.route("/insertanswer",methods=['POST'])
+def insertAnswer():
+    global conn;
+    content = request.get_json()
+    userid=content["userid"]
+    questionid=content["questionid"]
+    body=content["body"]
+    today = date.today().isoformat()
+    sql='select max(answerid) from answers'
+    cur = conn.cursor()
+    try:
+        cur.execute(sql)
+        res=cur.fetchone()
+        answerid=int(res[0])+1
+        sql='insert into answers values(%d,%s,%s,\'%s\',\'%s\');'%(answerid,questionid,userid,today,body)
+        print(sql)
+        cur.execute(sql)
+        conn.commit()
+    except Exception as e:
+        print(e)
+    return "Successfully added answer to database"
+    
+@app.route("/insertcomment",methods=['POST'])
+def insertComment():
+    global conn;
+    content = request.get_json()
+    userid=content["userid"]
+    questionid=content["questionid"]
+    body=content["body"]
+    today = date.today().isoformat()+time.strftime("%H:%M:%S")
+    sql='insert into comments values(%s,%s,\'%s\',\'%s\');'%(answerid,userid,today,body)
+    cur = conn.cursor()
+    try:
+        cur.execute(sql)
+        conn.commit()
+    except Exception as e:
+        print(e)
+    return "Successfully added comment to database"
+    
+
     
 @app.route("/login.html")
 def loginHTML():
