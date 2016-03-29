@@ -188,9 +188,10 @@ app.controller('createQuestionController', function($scope, $http, $rootScope) {
     console.log('Testing Create Question');
 });
 
-app.controller('adminController', function($scope, $http) {
-    console.log('Testing admin Page');
+app.controller('adminController', function($scope, $http, $rootScope) {
     $scope.user = {};
+    $scope.assignableBadges = [];
+    $scope.removableBadges = [];
     $scope.fecthUser = function() {
         $http({
             method: 'POST',
@@ -201,11 +202,59 @@ app.controller('adminController', function($scope, $http) {
             }
         }).success(function (response, status) {
             $scope.user = JSON.parse(response.data) != null ? JSON.parse(response.data)[0] : {};
-            console.log($scope.user);
+            console.log($scope.user.badges);
+            var userbadges = $scope.user.badges;
+            if(userbadges == null || userbadges.indexOf("gold") < 0) $scope.assignableBadges.push("gold"); 
+            else $scope.removableBadges.push("gold");
+            if(userbadges == null || userbadges.indexOf("silver") < 0) $scope.assignableBadges.push("silver"); 
+            else $scope.removableBadges.push("silver");
+            if(userbadges == null || userbadges.indexOf("bronze") < 0) $scope.assignableBadges.push("bronze"); 
+            else $scope.removableBadges.push("bronze");
         }).error(function () {
             console.log('failure');
         });
     }
-    $scope.assignableBadges = ["Bronze"];
-    $scope.removableBadges = ["Silver", "Gold"];
+    $scope.assignBadge = function(badge) {
+        console.log(badge);
+        $http({
+            method: 'POST',
+            url: '/addbadge',
+            data: {
+                userid: $rootScope.user.userid,
+                badge: badge
+            },
+            transformResponse: function (data, headersGetter, status) {
+                return {data: data};
+            }
+        }).success(function (response, status) {
+            var index = $scope.assignableBadges.indexOf(badge);
+            $scope.assignableBadges.splice(index, 1);
+            $scope.removableBadges.push(badge);
+            $scope.user.badges.push(badge);
+        }).error(function () {
+            console.log('failure');
+        });
+    };
+    $scope.removeBadge = function(badge) {
+        console.log(badge);
+        $http({
+            method: 'POST',
+            url: '/removebadge',
+            data: {
+                userid: $rootScope.user.userid,
+                badge: badge
+            },
+            transformResponse: function (data, headersGetter, status) {
+                return {data: data};
+            }
+        }).success(function (response, status) {
+            var index = $scope.removableBadges.indexOf(badge);
+            $scope.removableBadges.splice(index, 1);
+            $scope.assignableBadges.push(badge);
+            index = $scope.user.badges.indexOf(badge);
+            $scope.user.badges.splice(index, 1);
+        }).error(function () {
+            console.log('failure');
+        });
+    };
 });
