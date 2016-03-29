@@ -137,11 +137,11 @@ def insertquestion():
         cur.execute(sql)
         res=cur.fetchone()
         questionid=int(res[0])+1
-        sql='insert into questions values(%d,%s,%s,%s,%s);'#%(questionid,userid,today,title,body)
+        sql='insert into questions values(%s,%s,%s,%s,%s);'#%(questionid,userid,today,title,body)
         cur.execute(sql,[questionid,userid,today,title,body])
         conn.commit()
         for  tag in tags:
-            sql='insert into tagged values(%d,%s);'#%(questionid,tag)
+            sql='insert into tagged values(%s,%s);'#%(questionid,tag)
             cur.execute(sql,[questionid,tag])
             conn.commit()
     except Exception as e:
@@ -162,7 +162,7 @@ def insertAnswer():
         cur.execute(sql)
         res=cur.fetchone()
         answerid=int(res[0])+1
-        sql='insert into answers values(%d,%s,%s,%s,%s);'#%(answerid,questionid,userid,today,body)
+        sql='insert into answers values(%s,%s,%s,%s,%s);'#%(answerid,questionid,userid,today,body)
         print(sql)
         cur.execute(sql,[answerid,questionid,userid,today,body])
         conn.commit()
