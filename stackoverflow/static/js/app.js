@@ -49,9 +49,26 @@ app.controller('loginController', function($scope, $state) {
 });
 
 app.controller('questionController', function($scope, $rootScope, $state, $http) {
-    
     $scope.question = $rootScope.selectedQuestion;
     $scope.back = function() {$state.go('search')};
+    
+    $http({
+        method: 'POST',
+        url: '/question',
+        data: {query: $scope.question.questionid},
+        transformResponse: function (data, headersGetter, status) {
+            return {data: data};
+        }
+    }).success(function (response, status) {
+        var answermap = JSON.parse(response.data);
+        var answers = [];
+        for (var key in answermap) {
+            answers.push(answermap[key]);
+        }
+        $scope.question.answers = answers;
+    }).error(function () {
+        console.log('failure');
+    });
     
     $scope.createAnswer = function() {
         if($scope.newanswer == null) return alert('Please enter answer');
@@ -68,6 +85,7 @@ app.controller('questionController', function($scope, $rootScope, $state, $http)
             }
         }).success(function (response, status) {
             console.log(status);
+            $state.reload('question');
         }).error(function () {
             console.log('failure');
         });
@@ -81,24 +99,7 @@ app.controller('searchController', function($scope, $rootScope, $state, $http) {
     $scope.viewQuestion = function(index) {
         $rootScope.selectedQuestion = $scope.questions[index];
         console.log($rootScope.selectedQuestion.questionid);
-        $http({
-            method: 'POST',
-            url: '/question',
-            data: {query: $rootScope.selectedQuestion.questionid},
-            transformResponse: function (data, headersGetter, status) {
-                return {data: data};
-            }
-        }).success(function (response, status) {
-            var answermap = JSON.parse(response.data);
-            var answers = [];
-            for (var key in answermap) {
-                answers.push(answermap[key]);
-            }
-            $rootScope.selectedQuestion.answers = answers;
-            $state.go('question');
-        }).error(function () {
-            console.log('failure');
-        });
+        $state.go('question');
     };
     
     $scope.searchQuery = function() {
