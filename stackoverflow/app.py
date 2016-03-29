@@ -259,4 +259,4 @@ if __name__ == "__main__":
         HOST, PORT = host, port
         print "running on %s:%d" % (HOST, PORT)
         app.run(host=HOST, port=PORT, debug=debug, threaded=threaded)
-    run(debug=False,threaded=False,host='http://13.82.60.208',port=8111)
+    run()
