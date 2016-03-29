@@ -94,7 +94,8 @@ def getUserInfo():
     global conn;
     if(request.method== 'POST'):
         content = request.get_json()["username"]
-        sql='select * from users u left outer join userbadges b on u.userid=b.userid where lower(u.name) =\'%s\';'%(content.lower())
+        sql =' select * from users where lower(name)  =\'%s\';'%(content.lower())
+        #sql='select * from users u left outer join userbadges b on u.userid=b.userid where lower(u.name) =\'%s\';'%(content.lower())
         userArr=[]
         cur = conn.cursor()
         try:
@@ -104,7 +105,14 @@ def getUserInfo():
                 jsonOb={}
                 jsonOb['userid']=row[0]
                 jsonOb['name']=row[1]
-                jsonOb['badgename']=row[3]
+                sqlnew='select b.badgename from users u left outer join userbadges b on u.userid=b.userid where u.userid=%s;'%(row[0])
+                curnew= conn.cursor()
+                curnew.execute(sqlnew)
+                result=curnew.fetchall()
+                badges=[]
+                for val in result:
+                    badges.append(val[0])
+                jsonOb['badges']=badges
                 userArr.append(jsonOb)
         except Exception as e:
             print e
