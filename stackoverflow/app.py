@@ -54,29 +54,26 @@ def questionSearch():
             ans={}
             for row in rows:
                 answers={}
-                comments={}
+                comments=[]
                 if(row[5]!=None):
-                    comments['answerid']=row[5]
-                    comments['userid']=row[6]
-                    comments['body']=row[8]
+                    # comments['answerid']=row[5]
+                    # comments['userid']=row[6]
+                    comments.append(row[8])
                 if(row[0] not in ans):
                     answers['answerid']=row[0]
                     answers['questionid']=row[1]
                     answers['userid']=row[2]
                     answers['body']=row[4]
-                    c=[]
-                    c.append(comments)
-                    answers['comments']=c
+                    answers['comments']=comments
                     ans[row[0]]=answers
                 else:
                     answers=ans[row[0]]
                     c=answers['comments']
-                    c.append(comments)
+                    c.extend(comments)
                     answers['comments']=c
                     ans[row[0]]=answers
         except Exception as e:
             print e
-
     return str(json.dumps(ans))
 
 @app.route("/userinfo",methods=['POST'])
