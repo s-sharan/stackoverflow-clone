@@ -20,11 +20,12 @@ def search():
     if(request.method== 'POST'):
         content = request.get_json()["query"]
         print(content.lower())
-        sql = 'select * from questions where lower(title) like \'%s%s%s\';'%('%',content.lower(),'%')
+        arg='%'+str(content.lower())+'%'
+        sql = 'select * from questions where lower(title) like %s;'#%('%',content.lower(),'%')
         jsonArr=[]
         cur = conn.cursor()
         try:
-            cur.execute(sql)
+            cur.execute(sql,[arg])
             rows=cur.fetchall()
             for row in rows:
                 jsonOb={}
@@ -43,8 +44,8 @@ def questionSearch():
     if(request.method == 'POST'):
         content = request.get_json()["query"]
         print(content)
-        sql = 'select * from answers a left outer join comments c on a.answerid=c.answerid where a.questionid=%s;'%(content)
-        print(sql)
+        sql = 'select * from answers a left outer join comments c on a.answerid=c.answerid where a.questionid=%d;'#%(content)
+        print(sql,[content])
         cur = conn.cursor()
         try:
             cur.execute(sql)
@@ -95,20 +96,20 @@ def getUserInfo():
     global conn;
     if(request.method== 'POST'):
         content = request.get_json()["username"]
-        sql =' select * from users where lower(name)  =\'%s\';'%(content.lower())
+        sql =' select * from users where lower(name)  =\'%s\';'#%(content.lower())
         #sql='select * from users u left outer join userbadges b on u.userid=b.userid where lower(u.name) =\'%s\';'%(content.lower())
         userArr=[]
         cur = conn.cursor()
         try:
-            cur.execute(sql)
+            cur.execute(sql,[content.lower()])
             rows=cur.fetchall()
             for row in rows:
                 jsonOb={}
                 jsonOb['userid']=row[0]
                 jsonOb['name']=row[1]
-                sqlnew='select b.badgename from users u left outer join userbadges b on u.userid=b.userid where u.userid=%s;'%(row[0])
+                sqlnew='select b.badgename from users u left outer join userbadges b on u.userid=b.userid where u.userid=%d;'#%(row[0])
                 curnew= conn.cursor()
-                curnew.execute(sqlnew)
+                curnew.execute(sqlnew,[row[0]])
                 result=curnew.fetchall()
                 badges=[]
                 for val in result:
@@ -129,7 +130,6 @@ def insertquestion():
     userid=content["userid"]
     title=content["title"]
     body=content["body"]
-    
     tags=content["tags"]
     today = date.today().isoformat()
     sql='select max(questionid) from questions;'
@@ -138,12 +138,12 @@ def insertquestion():
         cur.execute(sql)
         res=cur.fetchone()
         questionid=int(res[0])+1
-        sql='insert into questions values(%d,%s,\'%s\',\'%s\',\'%s\');'%(questionid,userid,today,title,body)
-        cur.execute(sql)
+        sql='insert into questions values(%d,%s,\'%s\',\'%s\',\'%s\');'#%(questionid,userid,today,title,body)
+        cur.execute(sql,[questionid,userid,today,title,body])
         conn.commit()
         for  tag in tags:
-            sql='insert into tagged values(%d,\'%s\');'%(questionid,tag)
-            cur.execute(sql)
+            sql='insert into tagged values(%d,\'%s\');'#%(questionid,tag)
+            cur.execute(sql,[questionid,tag])
             conn.commit()
     except Exception as e:
         print(e)
@@ -163,9 +163,9 @@ def insertAnswer():
         cur.execute(sql)
         res=cur.fetchone()
         answerid=int(res[0])+1
-        sql='insert into answers values(%d,%s,%s,\'%s\',\'%s\');'%(answerid,questionid,userid,today,body)
+        sql='insert into answers values(%d,%s,%s,\'%s\',\'%s\');'#%(answerid,questionid,userid,today,body)
         print(sql)
-        cur.execute(sql)
+        cur.execute(sql,[answerid,questionid,userid,today,body])
         conn.commit()
     except Exception as e:
         print(e)
@@ -179,11 +179,11 @@ def insertComment():
     answerid=content["answerid"]
     body=content["body"]
     today = date.today().isoformat() + ' ' +time.strftime("%H:%M:%S")
-    sql='insert into comments values(%s,%s,\'%s\',\'%s\');'%(answerid,userid,today,body)
+    sql='insert into comments values(%s,%s,\'%s\',\'%s\');'#%(answerid,userid,today,body)
     print (sql)
     cur = conn.cursor()
     try:
-        cur.execute(sql)
+        cur.execute(sql,[answerid,userid,today,body])
         conn.commit()
     except Exception as e:
         print(e)
@@ -195,10 +195,10 @@ def addBadge():
     content = request.get_json()
     badge=content["badge"]
     userid=content["userid"]
-    sql='insert into userbadges values(\'%s\',%s);'%(badge,userid);
+    sql='insert into userbadges values(\'%s\',%s);'#%(badge,userid);
     try:
         cur = conn.cursor()
-        cur.execute(sql)
+        cur.execute(sql,[badge,userid])
         conn.commit()
     except Exception as e:
         print(e)
@@ -213,7 +213,7 @@ def removeBadge():
     sql='delete from userbadges where badgename=\'%s\' and userid=%s;'%(badge,userid);
     try:
         cur = conn.cursor()
-        cur.execute(sql)
+        cur.execute(sql,[badge,userid])
         conn.commit()
     except Exception as e:
         print(e)
