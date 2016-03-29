@@ -24,7 +24,7 @@ facebook = oauth.remote_app('facebook',
     request_token_params={'scope': 'email'}
 )
 
-@app.route("/")
+@app.route("/ind")
 def indexHTML():
     return render_template('index.html')
     
@@ -253,7 +253,7 @@ def createQuestionHTML():
 def adminHTML():
     return render_template('admin.html')
 
-@app.route('/fb')
+@app.route('/')
 @facebook.authorized_handler
 def facebook_authorized(resp):
     if resp is None:
@@ -266,12 +266,12 @@ def facebook_authorized(resp):
     session['name']=me.data['name']
     session['id']=me.data['id']
     print(session['name'],session['id'])
+# if(users.find({"name":me.data['name']}).count()>0):
+    #     return redirect(url_for('home'))
+    # else:
+    #     return redirect(url_for('signup'))
 
-    if(users.find({"name":me.data['name']}).count()>0):
-        return redirect(url_for('home'))
-    else:
-        return redirect(url_for('signup'))
-
+    # 
 @facebook.tokengetter
 def get_facebook_oauth_token():
     return session.get('oauth_token')
