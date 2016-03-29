@@ -75,9 +75,8 @@ def questionSearch():
                     ans[row[0]]=answers
         except Exception as e:
             print e
-    res={}
-    res['result']=ans.values();
-    return str(res)
+
+    return str(json.dumps(ans.values()))
 
 
 @app.route("/userinfo",methods=['POST'])
