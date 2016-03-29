@@ -121,29 +121,26 @@ def getUserInfo():
     
 @app.route("/insertquestion",methods=['POST'])
 def insertquestion():
+    print 'fbdhsjafbdasjl jfndkslafnjlds'
     global conn;
     print(request.get_json())
     content = request.get_json()
     userid=content["userid"]
     title=content["title"]
     body=content["body"]
-    tag=content["tags"]
-    tag=tag[1:-1]
-    tags=tag.split(',')
-    print userid,title,body,tags
+    
+    tags=content["tags"]
     today = date.today().isoformat()
-    sql='select max(questionid) from questions'
+    sql='select max(questionid) from questions;'
     cur = conn.cursor()
     try:
         cur.execute(sql)
         res=cur.fetchone()
         questionid=int(res[0])+1
         sql='insert into questions values(%d,%s,\'%s\',\'%s\',\'%s\');'%(questionid,userid,today,title,body)
-        print(sql)
         cur.execute(sql)
         conn.commit()
         for  tag in tags:
-            tag=tag[1:-1]
             sql='insert into tagged values(%d,\'%s\');'%(questionid,tag)
             cur.execute(sql)
             conn.commit()

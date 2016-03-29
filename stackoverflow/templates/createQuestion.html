@@ -24,7 +24,7 @@
                         </div>
                         <div class="form-group">
                             <select multiple class="form-control" ng-model="selectedTags">
-                                <option value="volvo">Volvo</option>
+                                <option ng-repeat="tag in allTags" value="{{tag|angular}}">{{tag|angular}}</option>
                             </select>
                         </div>
                         <div class="form-group">

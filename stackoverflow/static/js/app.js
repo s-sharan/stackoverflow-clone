@@ -112,13 +112,13 @@ app.controller('createQuestionController', function($scope, $http) {
     
     $http({
         method: 'POST',
-        url: '/search',
-        data: {query: $scope.query},
+        url: '/tags',
+        data: {},
         transformResponse: function (data, headersGetter, status) {
             return {data: data};
         }
     }).success(function (response, status) {
-        $scope.questions = JSON.parse(response.data);
+        $scope.allTags = JSON.parse(response.data);
     }).error(function () {
         console.log('failure');
     });
@@ -128,20 +128,24 @@ app.controller('createQuestionController', function($scope, $http) {
         else if($scope.question.body == null) $scope.error = "Enter description for the question";
         else if($scope.selectedTags == null || $scope.selectedTags.length <= 0) $scope.error = "Please select atleast one Tag";
         else {
-            $http.post('/insertquestion', {
-                userid: "1",
-                title: $scope.question.title,
-                body: $scope.question.body,
-                tags: $scope.selectedTags
-              }).then(function (response) {
-                console.log('response = ' + JSON.stringify(response));
-                if (response.status == 200) {
-                  $scope.error="Question Created Successfully";
-                  $scope.question.title = null; $scope.question.body = null; $scope.selectedTags = null; 
+            $http({
+                method: 'POST',
+                url: '/insertquestion',
+                data: {
+                    userid: "5969614",
+                    title: $scope.question.title,
+                    body: $scope.question.body,
+                    tags: $scope.selectedTags
+                },
+                transformResponse: function (data, headersGetter, status) {
+                    return {data: data};
                 }
-                else
-                  $scope.createStatus = 'Error = ' + JSON.stringify(response);
-              });
+            }).success(function (response, status) {
+                $scope.error="Question Created Successfully";
+                $scope.question.title = null; $scope.question.body = null; $scope.selectedTags = null; 
+            }).error(function () {
+                $scope.error = 'Server error while creating question';
+            });
         }
     };
     console.log('Testing Create Question');
