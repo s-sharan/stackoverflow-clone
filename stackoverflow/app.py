@@ -58,6 +58,15 @@ def search():
                 jsonOb['userid']=row[1]
                 jsonOb['title']=row[3]
                 jsonOb['body']=row[4]
+                sqlnew='select tagname from tagged where questionid=%s;'
+                curnew= conn.cursor()
+                curnew.execute(sqlnew,[row[0]])
+                result=curnew.fetchall()
+                tags=[]
+                for val in result:
+                    tags.append(val[0])
+                jsonOb['tags']=tags
+                
                 jsonArr.append(jsonOb)
         except Exception as e:
             print e

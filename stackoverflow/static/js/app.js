@@ -178,6 +178,7 @@ app.controller('searchController', function($scope, $rootScope, $state, $http) {
                 }
             }).success(function (response, status) {
                 $scope.questions = JSON.parse(response.data);
+                console.log($scope.questions);
                 if(JSON.parse(response.data) == null || JSON.parse(response.data).length <= 0)
                     $scope.error = 'No search results found';
                 else $scope.error = '';
