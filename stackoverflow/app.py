@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from flask.ext.triangle import Triangle
 import psycopg2
 import json
+from datetime import date
+
 app = Flask(__name__)
 Triangle(app)
 conn = psycopg2.connect("dbname='ry2294' user='ry2294' password='VFGTHP' host='w4111db.eastus.cloudapp.azure.com'")
@@ -105,7 +107,36 @@ def getUserInfo():
     return str(res)
          
     
-
+@app.route("/insertquestion",methods=['POST'])
+def insertquestion():
+    global conn;
+    print(request.get_json())
+    content = request.get_json()
+    userid=content["userid"]
+    title=content["title"]
+    body=content["body"]
+    tags=content["tags"]
+    print userid,title,body,tags
+    today = date.today().isoformat()
+    sql='select max(questionid) from questions'
+    cur = conn.cursor()
+    try:
+        cur.execute(sql)
+        res=cur.fetchone()
+        questionid=int(res[0])+1
+        sql='insert into questions values(%d,%s,\'%s\',\'%s\',\'%s\');'%(questionid,userid,today,title,body)
+        print(sql)
+        cur.execute(sql)
+        conn.commit()
+        for  tag in tags:
+            sql='insert into tagged values(%d,\'%s\');'%(questionid,tag)
+            cur.execute(sql)
+            conn.commit()
+    except Exception as e:
+        print(e)
+    return "Successfully added to database"
+    
+    
 @app.route("/login.html")
 def loginHTML():
     return render_template('login.html')
