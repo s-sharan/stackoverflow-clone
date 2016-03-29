@@ -30,10 +30,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
   });
 });
 
-app.controller('navigationController', function($scope, $state) {
+app.controller('navigationController', function($scope, $state, $rootScope) {
     console.log("Testing Navigation");
+    
     $scope.logout = function() {$state.go('login');};
     $scope.isLoggedIn = function() {return !$state.is('login')};
+    $rootScope.user = {userid: "5969614"};
 });
 
 app.controller('loginController', function($scope, $state) {
@@ -106,7 +108,7 @@ app.controller('searchController', function($scope, $rootScope, $state, $http) {
     }
 });
 
-app.controller('createQuestionController', function($scope, $http) {
+app.controller('createQuestionController', function($scope, $http, $rootScope) {
     $scope.question = {};
     $scope.error = "";
     
@@ -132,7 +134,7 @@ app.controller('createQuestionController', function($scope, $http) {
                 method: 'POST',
                 url: '/insertquestion',
                 data: {
-                    userid: "5969614",
+                    userid: $rootScope.user.userid,
                     title: $scope.question.title,
                     body: $scope.question.body,
                     tags: $scope.selectedTags

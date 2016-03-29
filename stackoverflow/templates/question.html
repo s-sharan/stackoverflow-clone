@@ -15,17 +15,27 @@
                     <table class="table table-striped table-hover">
                       <tbody>
                           <tr ng-repeat="answer in question.answers">
-                              <td class="col-xs-12">
+                                <td class="col-xs-8">
                                     <div> 
                                         <h4>{{answer.body|angular}}</h4>
-                                        <div class="panel panel-default inbox" ng-show='hasComments({{answer|angular}})'>
+                                        <div class="panel panel-default inbox">
                                             <div class="table-responsive">
                                                 <table class="table table-striped table-hover">
                                                   <tbody>
+                                                       <tr>
+                                                            <div class="row">
+                                                                <div class="col-xs-2">
+                                                                    <button ng-click="" type="button" class="btn btn-default" style="margin-top: 0px">Create a Comment</button>
+                                                                </div>
+                                                                <div class="col-xs-10">
+                                                                    <input class="form-control" type="text" ng-model="" placeholder="Enter an Answer">
+                                                                </div>
+                                                            </div>
+                                                       </tr> 
                                                       <tr ng-repeat="comment in answer.comments">
                                                           <td class="col-xs-12">
                                                               <div> 
-                                                                  <h6>{{comment.body|angular}}</h6>
+                                                                  <h6>{{comment|angular}}</h6>
                                                               </div>
                                                           </td>
                                                       </tr>
@@ -34,10 +44,19 @@
                                             </div>
                                         </div>
                                     </div>
-                              </td>
+                                </td>
                           </tr>
                       </tbody>
                     </table>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-xs-2">
+                    <button ng-click="" type="button" class="btn btn-default" style="margin-top: 30px">Create an Answer</button>
+                </div>
+                <div class="col-xs-10">
+                    <textarea rows="5" class="form-control" ng-model="newAnswer" placeholder="Enter an Answer">
                 </div>
             </div>
         </div>
