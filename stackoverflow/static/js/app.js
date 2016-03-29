@@ -109,7 +109,20 @@ app.controller('searchController', function($scope, $rootScope, $state, $http) {
 app.controller('createQuestionController', function($scope, $http) {
     $scope.question = {};
     $scope.error = "";
-    $scope.allTags = [{id: 1, label:"C++"}, {id: 2, label: "Java"}];
+    
+    $http({
+        method: 'POST',
+        url: '/search',
+        data: {query: $scope.query},
+        transformResponse: function (data, headersGetter, status) {
+            return {data: data};
+        }
+    }).success(function (response, status) {
+        $scope.questions = JSON.parse(response.data);
+    }).error(function () {
+        console.log('failure');
+    });
+    
     $scope.createQuestion = function() {
         if($scope.question.title == null) $scope.error = "Enter a title for the question";
         else if($scope.question.body == null) $scope.error = "Enter description for the question";
@@ -136,7 +149,7 @@ app.controller('createQuestionController', function($scope, $http) {
 
 app.controller('adminController', function($scope, $http) {
     console.log('Testing admin Page');
-    $scope.user = {name: "Rakesh Yarlagadda", badges: ["Silver", "Gold"]};
+    $scope.user = {};
     $scope.fecthUser = function() {
         $http({
             method: 'POST',
@@ -146,7 +159,8 @@ app.controller('adminController', function($scope, $http) {
                 return {data: data};
             }
         }).success(function (response, status) {
-            console.log(JSON.parse(response.data));
+            $scope.user = JSON.parse(response.data) != null ? JSON.parse(response.data)[0] : {};
+            console.log($scope.user);
         }).error(function () {
             console.log('failure');
         });
