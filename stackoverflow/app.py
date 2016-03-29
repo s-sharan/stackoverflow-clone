@@ -176,7 +176,7 @@ def insertComment():
     global conn;
     content = request.get_json()
     userid=content["userid"]
-    questionid=content["questionid"]
+    answerid=content["answerid"]
     body=content["body"]
     today = date.today().isoformat()+time.strftime("%H:%M:%S")
     sql='insert into comments values(%s,%s,\'%s\',\'%s\');'%(answerid,userid,today,body)
@@ -188,6 +188,35 @@ def insertComment():
         print(e)
     return "Successfully added comment to database"
     
+@app.route("/addbadge",methods=['POST'])
+def addBadge():
+    global conn;
+    content = request.get_json()
+    badge=content["badge"]
+    userid=content["userid"]
+    sql='insert into userbadges values(\'%s\',%s);'%(badge,userid);
+    try:
+        cur = conn.cursor()
+        cur.execute(sql)
+        conn.commit()
+    except Exception as e:
+        print(e)
+    return "Successfully added badge to database"
+
+@app.route("/removebadge",methods=['POST'])
+def removeBadge():
+    global conn;
+    content = request.get_json()
+    badge=content["badge"]
+    userid=content["userid"]
+    sql='delete from userbadges where badge=\'%s\' and userid=%s);'%(badge,userid);
+    try:
+        cur = conn.cursor()
+        cur.execute(sql)
+        conn.commit()
+    except Exception as e:
+        print(e)
+    return "Successfully removed badge from database"
 
     
 @app.route("/login.html")
