@@ -113,7 +113,9 @@ def insertquestion():
     userid=content["userid"]
     title=content["title"]
     body=content["body"]
-    tags=content["tags"]
+    tag=content["tags"]
+    tag=tag[1:-1]
+    tags=tag.split(',')
     print userid,title,body,tags
     today = date.today().isoformat()
     sql='select max(questionid) from questions'
@@ -127,6 +129,7 @@ def insertquestion():
         cur.execute(sql)
         conn.commit()
         for  tag in tags:
+            tag=tag[1:-1]
             sql='insert into tagged values(%d,\'%s\');'%(questionid,tag)
             cur.execute(sql)
             conn.commit()
