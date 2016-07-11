@@ -5,5 +5,7 @@ Makes use of Python Flask for the backend server and PostgreSQL for database.
 Created as project for course COMS-4111 Introduction to Databases
 
 Contributors:
-`Sharan Suryanarayan : s-sharan`
-`Rakesh Yarlagadda : ry2294`
+
+`Sharan Suryanarayan : @s-sharan`
+
+`Rakesh Yarlagadda : @ry2294`
